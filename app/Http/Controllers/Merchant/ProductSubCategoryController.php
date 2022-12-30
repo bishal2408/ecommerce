@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductCategoryRequest;
+use App\Http\Requests\ProductSubCategoryRequest;
 use App\Models\ProductCategory;
+use App\Models\ProductSubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class ProductCategoryController extends Controller
+class ProductSubCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +18,21 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        $categories = ProductCategory::where('merchant_id', Auth::user()->id)->paginate(10);
-        return view('merchant.category.index', compact('categories'));
+        $categories = ProductCategory::where('merchant_id', Auth::user()->id)->get();
+        // dd(count($categories));
+        if(count($categories) != 0){
+            foreach($categories as $category){
+                $cat = ProductCategory::findorFail($category->id);
+                $subCategory[] = $cat->subcategories;
+            }
+            return view('merchant.sub-category.index', compact('categories', 'subCategory'));
+        }
+        else{
+            $subCategory = null;
+            return view('merchant.sub-category.index', compact('categories', 'subCategory'));
+
+        }
+        
     }
 
     /**
@@ -37,15 +51,15 @@ class ProductCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductCategoryRequest $request)
+    public function store(ProductSubCategoryRequest $request)
     {
-        $request->validated($request->input('name'));
+        $request->validated();
         $attributes = [
             'name' => $request->input('name'),
-            'merchant_id'=>Auth::user()->id,
+            'category_id'=> $request->get('category'),
         ];
-        ProductCategory::create($attributes);
-        return redirect()->back()->with('successMessage', 'Category Added Successfully');
+        ProductSubCategory::create($attributes);
+        return redirect()->back()->with('successMessage', 'Sub Category Added Successfully!');
     }
 
     /**
@@ -77,11 +91,9 @@ class ProductCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductCategoryRequest $request, ProductCategory $category)
+    public function update(Request $request, $id)
     {
-        $request->validated();
-        $category->update($request->all());
-        return redirect()->back()->with('editMessage', 'Category Updated!');
+        //
     }
 
     /**
@@ -90,10 +102,18 @@ class ProductCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCategory $category)
+    public function destroy($id)
     {
-        $category->delete();
-        return redirect()->back()->with('deleteMessage', 'Category Deleted!');
+ 
+        ProductSubCategory::where('category_id', $id)->delete();
+        ProductCategory::where('id', $id)->delete();
+        return redirect()->back();
+    }
 
+    public function singleDelete($id)
+    {
+        $subCategory = ProductSubCategory::findorFail($id);
+        $subCategory->delete();
+        return redirect()->back();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Merchant\ProductSubCategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,5 +25,8 @@ Auth::routes();
 Route::group(['prefix'=>'merchant', 'as'=>'merchant.'], function(){
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::resource('category',\App\Http\Controllers\Merchant\ProductCategoryController::class);
+    Route::resource('sub-category',\App\Http\Controllers\Merchant\ProductSubCategoryController::class);
+    Route::get('/subCategory/delete/{id}', [ProductSubCategoryController::class, 'singleDelete'])->name('sub-category.delete');
+
 });
 

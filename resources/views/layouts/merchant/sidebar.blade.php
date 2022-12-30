@@ -6,7 +6,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Admin</div>
+        <div class="sidebar-brand-text mx-3">Merchant</div>
     </a>
 
     <!-- Divider -->
@@ -25,16 +25,22 @@
             <i class="fas fa-fw fa-user-alt"></i>
             <span>User Demographics </span></a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item @if (Route::is('merchant.category*')) active @endif">
+        <a class="nav-link" href="{{ route('merchant.category.index') }}">
             <i class="fas fa-fw fa-list-alt"></i>
             <span>Add Category</span></a>
-    </li>   
+    </li>
+    <li class="nav-item @if (Route::is('merchant.sub-category*')) active @endif">
+        <a class="nav-link" href="{{ route('merchant.sub-category.index') }}">
+            <i class="fas fa-fw fa-list-alt"></i>
+            <span>Add Sub Category</span></a>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="#">
             <i class="fas fa-fw fa-list-alt"></i>
-            <span>Add product</span></a>
-    </li>
+            <span>Add Product</span></a>
+    </li>   
+
     <li class="nav-item">
         <a class="nav-link" href="#">
             <i class="fas fa-fw fa-cog"></i>
