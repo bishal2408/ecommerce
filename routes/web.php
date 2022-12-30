@@ -24,9 +24,12 @@ Auth::routes();
 
 Route::group(['prefix'=>'merchant', 'as'=>'merchant.'], function(){
     Route::get('home', [HomeController::class, 'index'])->name('home');
+    // product category
     Route::resource('category',\App\Http\Controllers\Merchant\ProductCategoryController::class);
+    // product sub category
     Route::resource('sub-category',\App\Http\Controllers\Merchant\ProductSubCategoryController::class);
     Route::get('/subCategory/delete/{id}', [ProductSubCategoryController::class, 'singleDelete'])->name('sub-category.delete');
-
+    // merchant settings
+    Route::resource('setting',\App\Http\Controllers\Merchant\MerchantSettingController::class);
 });
 

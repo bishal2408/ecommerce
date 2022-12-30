@@ -41,8 +41,8 @@
             <span>Add Product</span></a>
     </li>   
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item @if (Route::is('merchant.setting*')) active @endif">
+        <a class="nav-link" href="{{ route('merchant.setting.index') }}">
             <i class="fas fa-fw fa-cog"></i>
             <span>Merchant Settings</span></a>
     </li>
