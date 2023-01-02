@@ -35,8 +35,8 @@
             <i class="fas fa-fw fa-list-alt"></i>
             <span>Add Sub Category</span></a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item @if (Route::is('merchant.product*')) active @endif">
+        <a class="nav-link" href="{{ route('merchant.product.index') }}">
             <i class="fas fa-fw fa-list-alt"></i>
             <span>Add Product</span>
         </a>

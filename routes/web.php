@@ -31,5 +31,8 @@ Route::group(['prefix'=>'merchant', 'as'=>'merchant.'], function(){
     Route::get('/subCategory/delete/{id}', [ProductSubCategoryController::class, 'singleDelete'])->name('sub-category.delete');
     // merchant settings
     Route::resource('setting',\App\Http\Controllers\Merchant\MerchantSettingController::class);
+
+    // product
+    Route::resource('product', \App\Http\Controllers\Merchant\ProductController::class);
 });
 
