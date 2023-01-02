@@ -38,7 +38,8 @@
     <li class="nav-item">
         <a class="nav-link" href="#">
             <i class="fas fa-fw fa-list-alt"></i>
-            <span>Add Product</span></a>
+            <span>Add Product</span>
+        </a>
     </li>   
 
     <li class="nav-item @if (Route::is('merchant.setting*')) active @endif">
