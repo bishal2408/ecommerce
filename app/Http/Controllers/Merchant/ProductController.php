@@ -3,10 +3,22 @@
 namespace App\Http\Controllers\Merchant;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
+use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\ProductSubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Traits\UploadFileTrait;
 
 class ProductController extends Controller
 {
+    use UploadFileTrait;
+    private $product_photo_path;
+    public function __construct()
+    {
+        $this->product_photo_path = public_path('upload/product/photo/');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('merchant.product.index');
+        $products = Product::where('merchant_id', Auth::user()->id)->latest()->get();
+        return view('merchant.product.index', compact('products'));
     }
 
     /**
@@ -24,7 +37,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories= ProductCategory::where('merchant_id', Auth::user()->id)->get();
+        return view('merchant.product.create', compact('categories'));
     }
 
     /**
@@ -33,9 +47,16 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $request->validated();
+        $data = $request->all();
+        $photoName = $this->uploadFile($request->file('photo'), $this->product_photo_path);
+        $data['photo'] = $photoName;
+        $data['category_id']= $request->get('category');
+        $data['sub_category_id']= $request->get('sub_category');
+        Product::create($data);
+        return redirect()->route('merchant.product.create')->with('successMessage', 'Product Added Sucessfully!');
     }
 
     /**

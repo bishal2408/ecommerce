@@ -21,6 +21,14 @@ class Product extends Model
     
     protected $appends = ['product_photo'];
     public function getProductPhotoAttribute(){
-        return asset('upload/product/photo/')."/".$this->logo;
+        return asset('upload/product/photo/')."/".$this->photo;
+    }
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class);
+    }
+    public function subcategory()
+    {
+        return $this->belongsTo(ProductSubCategory::class, 'id');
     }
 }

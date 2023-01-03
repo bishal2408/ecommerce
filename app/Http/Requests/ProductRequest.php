@@ -11,9 +11,9 @@ class ProductRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,12 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'=>'required',
+            'description'=>'required',
+            'category'=>'required',
+            'photo'=>'required',
+            'price'=>'required',
+            'stock_quantity'=>'required',
         ];
     }
 }

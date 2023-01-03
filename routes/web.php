@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Merchant\ProductCategoryController;
 use App\Http\Controllers\Merchant\ProductSubCategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -35,4 +36,5 @@ Route::group(['prefix'=>'merchant', 'as'=>'merchant.'], function(){
     // product
     Route::resource('product', \App\Http\Controllers\Merchant\ProductController::class);
 });
+Route::get('/subcategories/{id}', [ProductCategoryController::class, 'getSubcategories']);
 

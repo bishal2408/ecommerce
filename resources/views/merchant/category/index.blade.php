@@ -40,7 +40,7 @@
                             <form action="{{ route('merchant.category.store') }}" method="POST">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name" class=" font-weight-bold">Category</label>
+                                    <label for="name" class="font-weight-bold">Category</label>
                                     <input type="text" name="name" id="name" class="form-control" placeholder="Enter category type">
                                     @error('name')
                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">

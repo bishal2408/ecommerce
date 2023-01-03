@@ -13,6 +13,7 @@ use App\Traits\UploadFileTrait;
 class MerchantSettingController extends Controller
 {
     use UploadFileTrait;
+    private $merchant_logo_path;
     public function __construct()
     {
         $this->merchant_logo_path = public_path('upload/merchant/logos/');
