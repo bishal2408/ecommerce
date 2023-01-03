@@ -47,16 +47,26 @@
                                             <td>{{ $product->name }}</td>
                                             <td>{{ $product->category->name }}</td>
                                             @if ( $product->subcategory == null)
-                                                <td></td>
+                                                <td></td> 
                                             @else
-                                                <td>{{ $product->subcategory->name }}</td>
+                                                <td>{{ $product->subcategory->name }}</td>  
                                             @endif
                                             <td>{{ $product->price }}</td>
                                             <td>{{ $product->stock_quantity }}</td>
-                                            <td>
-                                                <a href="#">Show</a>
-                                                <a href="#">Edit</a>
-                                                <a href="#">Delete</a>
+                                            <td class="d-flex flex-row">
+                                                <a class="btn btn-warning btn-circle btn-sm " href="{{ route('merchant.product.show', ['product'=>$product->id]) }}">
+                                                    <i class="fa fa-fw fa-eye pr-1"></i>
+                                                </a>
+                                                <a class="btn btn-primary btn-circle btn-sm mx-1" href="#">
+                                                    <i class="fa fa-fw fa-edit pr-1"></i>
+                                                </a>
+                                                <form action="{{ route('merchant.product.destroy', ['product'=>$product->id]) }}" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-danger btn-circle btn-sm mr-1">
+                                                        <i class="fa fa-fw fa-trash pr-1"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                         @endforeach

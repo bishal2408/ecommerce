@@ -28,17 +28,17 @@
     <li class="nav-item @if (Route::is('merchant.category*')) active @endif">
         <a class="nav-link" href="{{ route('merchant.category.index') }}">
             <i class="fas fa-fw fa-list-alt"></i>
-            <span>Add Category</span></a>
+            <span>Category</span></a>
     </li>
     <li class="nav-item @if (Route::is('merchant.sub-category*')) active @endif">
         <a class="nav-link" href="{{ route('merchant.sub-category.index') }}">
             <i class="fas fa-fw fa-list-alt"></i>
-            <span>Add Sub Category</span></a>
+            <span>Sub Category</span></a>
     </li>
     <li class="nav-item @if (Route::is('merchant.product*')) active @endif">
         <a class="nav-link" href="{{ route('merchant.product.index') }}">
             <i class="fas fa-fw fa-list-alt"></i>
-            <span>Add Product</span>
+            <span>Product</span>
         </a>
     </li>   
 

@@ -96,7 +96,7 @@ class ProductCategoryController extends Controller
         return redirect()->back()->with('deleteMessage', 'Category Deleted!');
 
     }
-    public function getSubcategories(Request $request, $id)
+    public function getSubcategories($id)
     {
         $subcategories = ProductCategory::findorFail($id)->subcategories;
         return response()->json($subcategories);
