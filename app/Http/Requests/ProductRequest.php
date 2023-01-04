@@ -23,11 +23,12 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+        $checkNullableOrRequired = isset($this->product) ? 'nullable' : 'required|file|mimes:jpeg,png,gif,jpg|max:2048';
         return [
             'name'=>'required',
             'description'=>'required',
             'category'=>'required',
-            'photo'=>'required',
+            'photo'=> $checkNullableOrRequired,
             'price'=>'required',
             'stock_quantity'=>'required',
         ];

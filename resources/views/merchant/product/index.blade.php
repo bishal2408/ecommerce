@@ -37,6 +37,7 @@
                                             <th>Sub Category</th>
                                             <th>Price</th>
                                             <th>Quantity</th>
+                                            <th>Photo</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -53,11 +54,14 @@
                                             @endif
                                             <td>{{ $product->price }}</td>
                                             <td>{{ $product->stock_quantity }}</td>
+                                            <td>
+                                                <img width="50" class="rounded" src="{{ $product->product_photo }}" alt="Product Photo">
+                                            </td>
                                             <td class="d-flex flex-row">
                                                 <a class="btn btn-warning btn-circle btn-sm " href="{{ route('merchant.product.show', ['product'=>$product->id]) }}">
                                                     <i class="fa fa-fw fa-eye pr-1"></i>
                                                 </a>
-                                                <a class="btn btn-primary btn-circle btn-sm mx-1" href="#">
+                                                <a class="btn btn-primary btn-circle btn-sm mx-1" href="{{ route('merchant.product.edit', ['product'=>$product->id]) }}">
                                                     <i class="fa fa-fw fa-edit pr-1"></i>
                                                 </a>
                                                 <form action="{{ route('merchant.product.destroy', ['product'=>$product->id]) }}" method="POST">

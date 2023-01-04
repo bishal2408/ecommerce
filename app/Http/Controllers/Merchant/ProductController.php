@@ -76,21 +76,38 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        $categories= ProductCategory::where('merchant_id', Auth::user()->id)->get();
+        $subcategories = ProductSubCategory::where('category_id', $product->category_id)->get();
+        return view('merchant.product.edit', compact('product', 'categories', 'subcategories'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param ProductRequest  $request
+     * @param Product  $prodyct
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        $request->validated();
+        $data = $request->all();
+
+        if ($request->hasFile('photo')) {
+            if ($request->get('old_photo') != null) {  
+                $this->removePhysicalFile($request->get('old_photo'), $this->product_photo_path);
+            }
+            $photoName = $this->uploadFile($request->file('photo'), $this->product_photo_path);
+            $data['photo'] = $photoName;
+        }
+        // return $data;
+        $product->update($data);
+        $product->category_id = $data['category'];
+        $product->sub_category_id = $data['sub_category'];
+        $product->save();
+        return redirect()->route('merchant.product.index');
     }
 
     /**
@@ -101,6 +118,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $this->removePhysicalFile($product->photo, $this->product_photo_path);
         $product->delete();
         return redirect()->back()->with('deleteMessage', 'Product Deleted!!');
     }
