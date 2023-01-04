@@ -120,7 +120,7 @@
                                 <div class="form-group">
                                     <input type="submit" value="Update Product" class="btn btn-primary btn-md" class="form-control">
                                 </div>
-                            </form>
+                            </form> 
                         </div>
                     </div>
 
