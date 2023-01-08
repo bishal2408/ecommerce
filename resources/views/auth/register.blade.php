@@ -24,6 +24,8 @@
                                 @enderror
                             </div>
                         </div>
+                        <input type="hidden" name="role" value="0">
+                        <input type="hidden" name="photo">
 
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>

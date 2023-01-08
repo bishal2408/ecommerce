@@ -14,9 +14,10 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item @if (Route::is('merchant.home')) active @endif">
-        <a class="nav-link" href="{{ route("merchant.home")  }}">
+        <a class="nav-link" href="{{ route("merchant.home")  }}" >
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span>Dashboard</span>
+        </a>
     </li>
     <hr class="sidebar-divider">
 

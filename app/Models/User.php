@@ -24,6 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'date_of_birth',
+        'photo',
     ];
 
     /**
@@ -44,4 +47,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    protected $appends = ['user_photo'];
+    public function getUserPhotoAttribute(){
+        return asset('upload/user/photo/')."/".$this->photo;
+    }
+
 }
