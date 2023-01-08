@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomerHomeController extends Controller
 {
+    // for using file trait
     use UploadFileTrait;
+    // to register user
     use RegistersUsers;
+
     private $user_photo_path;
     // constructor
     public function __construct()
@@ -26,6 +29,7 @@ class CustomerHomeController extends Controller
     {
         return view('welcome');
     }
+
     // for cutomer registration 
     protected function guard()
     {
