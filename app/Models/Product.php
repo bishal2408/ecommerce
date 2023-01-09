@@ -23,6 +23,10 @@ class Product extends Model
     public function getProductPhotoAttribute(){
         return asset('upload/product/photo/')."/".$this->photo;
     }
+    public function merchant()
+    {
+        return $this->belongsTo(User::class, 'merchant_id');
+    }
 
     public function category()
     {

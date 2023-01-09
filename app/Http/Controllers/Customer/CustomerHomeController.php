@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,8 @@ class CustomerHomeController extends Controller
     // user landing page
     public function index()
     {
-        return view('welcome');
+        $hot_deals = Product::select('id', 'name', 'description', 'price', 'photo')->take(7)->get();
+        return view('welcome', compact('hot_deals'));
     }
 
     // for cutomer registration 
@@ -55,4 +57,11 @@ class CustomerHomeController extends Controller
         $this->guard()->login($user);
         return redirect('/checkrole');
     }
+
+    public function showProduct(Product $product)
+    {
+        $related_products = Product::select('id', 'name', 'description', 'price', 'photo')->take(4)->get();
+        return view('customer.showProduct', compact('product', 'related_products'));
+    }
+
 }

@@ -208,7 +208,6 @@
             </script>
         @endif  
         <!-- Nav Item - User Information -->
-        
 
     </ul>
 

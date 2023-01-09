@@ -37,6 +37,32 @@
         .fa-shopping-cart:hover{
             color: rgb(223, 71, 89)!important;
         }
+        .ad-img {
+            position: relative;
+        }
+        .text-overlay {
+            position: absolute;
+            bottom: 35%;
+            left: 4%;
+        }
+        .text-decoration-none {
+            text-decoration: none;
+        }
+        .hot-product-img {
+            width: 30%;
+            height: 13vh;
+            object-fit: cover;
+            overflow: hidden;
+        }
+        .hot-product-desc {
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .hot-product:hover {
+            background-color: rgb(250, 242, 242);
+        }
     </style>
 </head>
 <body>

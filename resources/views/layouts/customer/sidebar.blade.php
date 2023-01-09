@@ -1,8 +1,8 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-white sidebar sidebar-light accordion " id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-white sidebar sidebar-light accordion position-fixed" id="accordionSidebar">
     
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center my-3">
+    <a href="{{ route('user.home') }}" class="sidebar-brand d-flex align-items-center justify-content-center my-3">
         <div class="sidebar-brand-icon">
             <i class="fas fa-shopping-bag text-danger"></i>
         </div>

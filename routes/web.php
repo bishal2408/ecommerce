@@ -40,6 +40,10 @@ Route::group(['prefix'=>'merchant', 'as'=>'merchant.', 'middleware'=>'isMerchant
     // product
     Route::resource('product', \App\Http\Controllers\Merchant\ProductController::class);
 });
+
 Route::get('/subcategories/{id}', [ProductCategoryController::class, 'getSubcategories']);
 Route::post('/customerRegister', [CustomerHomeController::class, 'customerRegister'])->name('customerRegister');
 
+Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
+    Route::get('showProduct/{product}', [CustomerHomeController::class, 'showProduct'])->name('showProduct');
+});
