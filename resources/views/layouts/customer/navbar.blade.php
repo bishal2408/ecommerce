@@ -52,7 +52,9 @@
             <li class="nav-item">
                 <a href="" class="nav-link">
                     <i class="fa fa-shopping-cart" style="font-size: 1.2rem;"></i>
-                    <p class="badge badge-pill badge-danger">0</p> 
+                    <p class="badge badge-pill badge-danger">
+                        @if ($cart_count == null) 0 @else {{ $cart_count }} @endif
+                    </p> 
                 </a>
             </li>
             <li class="nav-item dropdown no-arrow">

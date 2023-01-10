@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -29,7 +30,11 @@ class CustomerHomeController extends Controller
     public function index()
     {
         $hot_deals = Product::select('id', 'name', 'description', 'price', 'photo')->take(7)->get();
-        return view('welcome', compact('hot_deals'));
+        if(Auth::user()!= null){
+            $cart_count = Order::where('user_id', Auth::user()->id)->where('on_cart', Order::ADD_TO_CART)->count();
+            return view('welcome', compact('hot_deals', 'cart_count'));
+        }
+        return view('welcome', compact('hot_deals')); 
     }
 
     // for cutomer registration 
@@ -60,8 +65,15 @@ class CustomerHomeController extends Controller
 
     public function showProduct(Product $product)
     {
+        $cart_count = Order::where('user_id', Auth::user()->id)->where('on_cart', Order::ADD_TO_CART)->count();
         $related_products = Product::select('id', 'name', 'description', 'price', 'photo')->take(4)->get();
-        return view('customer.showProduct', compact('product', 'related_products'));
+        if(Auth::user() != null){
+            $existingCartItem = Order::where('user_id', Auth::user()->id)->where('product_id', $product->id)->first();
+            return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count'));
+        }
+        $existingCartItem = null;
+        return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem'));
+        
     }
 
 }

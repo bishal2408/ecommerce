@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Customer\CustomerHomeController;
+use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Merchant\ProductCategoryController;
 use App\Http\Controllers\Merchant\ProductSubCategoryController;
@@ -46,4 +47,10 @@ Route::post('/customerRegister', [CustomerHomeController::class, 'customerRegist
 
 Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
     Route::get('showProduct/{product}', [CustomerHomeController::class, 'showProduct'])->name('showProduct');
+    Route::middleware('auth')->group(function(){
+        Route::post('/add-cart/{product}', [OrderController::class,  'addProductToCart'])->name('addProductToCart');
+        Route::post('/update-quantity/{order}/', [OrderController::class,  'updateProductQuantity'])->name('updateProductQuantity');
+    });
+    
+
 });

@@ -15,6 +15,22 @@
                     @include('layouts.customer.navbar')
                     <div class="container">
                         <section class="product">
+                            @if(session('successMessage'))
+                            <div class="alert alert-primary alert-dismissible fade show m-3" role="alert">
+                                {{ session('successMessage') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            @endif
+                            @if(session('editMessage'))
+                            <div class="alert alert-primary alert-dismissible fade show m-3" role="alert">
+                                {{ session('editMessage') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            @endif
                             <div class="container px-4 px-lg-5">
                                 <div class="row gx-4 gx-lg-5 align-items-center">
                                     <div class="col-md-6"><img class="card-img-top rounded-3 mb-5 mb-md-0" src="{{ $product->product_photo }}" alt="..." /></div>
@@ -26,13 +42,43 @@
                                             <span class="badge badge-danger">Rs. {{ $product->price }}</span>
                                         </div>
                                         <p class="lead">{{ $product->description }}</p>
-                                        <div class="d-flex">
-                                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
-                                            <button class="btn btn-outline-danger flex-shrink-0" type="button">
-                                                <i class="bi-cart-fill me-1"></i>
-                                                Add to cart
-                                            </button>
-                                        </div>
+                                        @if ($existingCartItem == null)
+                                            <form action="{{ route('customer.addProductToCart', ['product'=> $product->id]) }}" method="POST"class="d-flex">
+                                        @else
+                                            <form action="{{ route('customer.updateProductQuantity', ['order'=> $existingCartItem->id]) }}" method="POST" class="d-flex">
+                                        @endif
+                                            @csrf
+                                            @if ($existingCartItem == null)
+                                                <input name="quantity" class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                                                @error('quantity')
+                                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                        {{ $message }}
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @enderror
+                                                <button class="btn btn-outline-danger flex-shrink-0" type="submit">
+                                                    <i class="fa fa-shopping-cart me-1"></i>
+                                                    Add to cart
+                                                </button>
+                                            @else
+                                                <input name="quantity" class="form-control text-center me-3" id="inputQuantity" type="num" value="{{ $existingCartItem->quantity }}" style="max-width: 3rem" />
+                                                @error('quantity')
+                                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                        {{ $message }}
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                @enderror
+                                                <button class="btn btn-outline-danger flex-shrink-0" type="submit">
+                                                    <i class="fa fa-shopping-cart me-1"></i>
+                                                    Update cart
+                                                </button>
+                                            @endif
+                                           
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +109,6 @@
                                         </div>
                                     </div>
                                     @endforeach
-
                                 </div>
                             </div>
                         </section>
