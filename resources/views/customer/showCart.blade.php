@@ -22,7 +22,14 @@
                             </button>
                         </div>
                         @endif
-                        
+                        @if(session('orderMessage'))
+                        <div class="alert alert-danger alert-dismissible fade show m-3" role="alert">
+                            {{ session('orderMessage') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @endif
                         <section class="h-100 gradient-custom">
                             <div class="container">
                               <div class="row d-flex justify-content-center my-4">
@@ -113,11 +120,41 @@
                                       <h5 class="mb-0 font-weight-bold">Summary</h5>
                                     </div>
                                     <div class="card-body">
-                                      <form action="">
+                                      <form action="{{ route('customer.checkout') }}" method="POST">
+                                          @csrf
                                           <div class="form-group">
-                                            <label for="address" class="font-weight-bold">Delievery Address</label>
-                                            <textarea type="textarea" height="100" name="address" class="form-control" placeholder="Detailed Delivery Address"></textarea>
+                                            @if ($address==null)
+                                              <textarea  height="100" name="address" class="form-control" placeholder="Detailed Delivery Address"></textarea>
+                                            @else
+                                              <textarea height="100" name="address" class="form-control" placeholder="Detailed Delivery Address"> {{ $address->address }}</textarea>
+                                            @endif
+                                            @error('address')
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ $message }}
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            @enderror
                                           </div>
+                                          <div class="form-group">
+                                            @if ($address==null)
+                                              <input type="text" height="100" name="phone" class="form-control" placeholder="Phone Number">
+
+                                            @else
+                                              <input value="{{ $address->phone }}" type="text" height="100" name="phone" class="form-control" placeholder="Phone Number">
+
+                                            @endif
+                                            @error('phone')
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ $message }}
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            @enderror
+                                          </div>
+                                          <hr>
                                           <ul class="list-group list-group-flush">
                                             <li
                                               class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">

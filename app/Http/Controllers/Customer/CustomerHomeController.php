@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFileTrait;
@@ -86,8 +87,9 @@ class CustomerHomeController extends Controller
         $cart = Order::where('user_id', Auth::user()->id)
                     ->where('on_cart', Order::ADD_TO_CART)
                     ->where('order_status', null);
+        $address = UserAddress::where('user_id', Auth::user()->id)->first();
         $cart_count = $cart->count();
         $cart_items = $cart->get();
-        return  view('customer.showCart', compact('cart_count', 'cart_items'));
+        return  view('customer.showCart', compact('cart_count', 'cart_items', 'address'));
     }
 }

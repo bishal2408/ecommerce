@@ -53,7 +53,6 @@ Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
         Route::get('cart', [CustomerHomeController::class, 'showCart'])->name('show.cart');
         Route::delete('/remove-cart/{order}', [OrderController::class, 'delete'])->name('item.delete');
         Route::post('/update_qty', [OrderController::class, 'updateQty'])->name('update_qty');
+        Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
     });
-    
-
 });

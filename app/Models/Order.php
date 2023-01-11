@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     const ADD_TO_CART = 1;
+    const REMOVE_FROM_CART = 0;
     const ORDER_ON_PROCESS = 'Onprocess';
     const ORDER_DELIVERED = 'Delivered';
 
