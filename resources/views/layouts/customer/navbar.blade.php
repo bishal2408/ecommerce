@@ -50,7 +50,7 @@
         <div class="topbar-divider d-none d-sm-block" ></div>
         @if (Auth::user() != null)
             <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{{ route('customer.show.cart') }}" class="nav-link">
                     <i class="fa fa-shopping-cart" style="font-size: 1.2rem;"></i>
                     <p class="badge badge-pill badge-danger">
                         @if ($cart_count == null) 0 @else {{ $cart_count }} @endif

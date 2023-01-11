@@ -28,10 +28,28 @@ class OrderController extends Controller
     public function updateProductQuantity(QuantityRequest $request, Order $order)
     {
         $request->validated();
-        $order = Order::where('user_id', Auth::user()->id)->where('id', $order->id)->first();
+        $order = Order::where('user_id', Auth::user()->id)
+            ->where('id', $order->id)
+            ->where('order_status', null)
+            ->first();
         $order->update([
             'quantity' => $request->quantity,
         ]);
         return redirect()->back()->with('editMessage', "Product quanity updated!");
+    }
+
+
+    public function updateQty(Request $request)
+    {
+        $order = Order::find($request->item_id);
+        $order->quantity = $request->qty;
+        $order->save();
+        return response()->json(["status" => "ok"]);
+    }
+
+    public function delete(Order $order)
+    {
+        $order->delete();
+        return redirect()->back()->with('deleteMessage', 'Successfully removed from the cart!');
     }
 }

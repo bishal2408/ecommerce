@@ -31,7 +31,10 @@ class CustomerHomeController extends Controller
     {
         $hot_deals = Product::select('id', 'name', 'description', 'price', 'photo')->take(7)->get();
         if(Auth::user()!= null){
-            $cart_count = Order::where('user_id', Auth::user()->id)->where('on_cart', Order::ADD_TO_CART)->count();
+            $cart_count = Order::where('user_id', Auth::user()->id)
+                    ->where('on_cart', Order::ADD_TO_CART)
+                    ->where('order_status', null)
+                    ->count();
             return view('welcome', compact('hot_deals', 'cart_count'));
         }
         return view('welcome', compact('hot_deals')); 
@@ -65,15 +68,26 @@ class CustomerHomeController extends Controller
 
     public function showProduct(Product $product)
     {
-        $cart_count = Order::where('user_id', Auth::user()->id)->where('on_cart', Order::ADD_TO_CART)->count();
         $related_products = Product::select('id', 'name', 'description', 'price', 'photo')->take(4)->get();
         if(Auth::user() != null){
+            $cart_count = Order::where('user_id', Auth::user()->id)
+            ->where('on_cart', Order::ADD_TO_CART)
+            ->where('order_status', null)
+            ->count();
             $existingCartItem = Order::where('user_id', Auth::user()->id)->where('product_id', $product->id)->first();
             return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count'));
         }
         $existingCartItem = null;
         return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem'));
-        
     }
-
+    
+    public function showCart()
+    {
+        $cart = Order::where('user_id', Auth::user()->id)
+                    ->where('on_cart', Order::ADD_TO_CART)
+                    ->where('order_status', null);
+        $cart_count = $cart->count();
+        $cart_items = $cart->get();
+        return  view('customer.showCart', compact('cart_count', 'cart_items'));
+    }
 }
