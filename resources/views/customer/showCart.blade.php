@@ -22,13 +22,14 @@
                             </button>
                         </div>
                         @endif
+                        
                         <section class="h-100 gradient-custom">
                             <div class="container">
                               <div class="row d-flex justify-content-center my-4">
                                 <div class="col-md-8">
-                                  <div class="card mb-4">
+                                  <div class="card mb-4 shadow">
                                     <div class="card-header py-3">
-                                      <h5 class="mb-0">Cart - {{ $cart_count }} items</h5>
+                                      <h5 class="mb-0 font-weight-bold">Cart - {{ $cart_count }} items</h5>
                                     </div>
                                     <div class="card-body">
                                       @foreach ($cart_items as $item)
@@ -47,17 +48,17 @@
                             
                                             <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                                             <!-- Data -->
-                                            <p><strong>{{ $item->product->name }}</strong></p>
+                                            <p class="font-weight-bold text-lg">{{ $item->product->name }}</p>
                                             <p class="">
-                                               <span class="font-weight-bold"> Description: </span>{{ $item->product->description }}
+                                               <span class="font-weight-bold"></span>{{ $item->product->description }}
                                             </p>
                                             <form action="{{ route('customer.item.delete', ['order'=>$item->id]) }}" class="d-flex" method="POST">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip" title="Remove item">
+                                                <button type="submit" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip" title="Remove item">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-outline-danger btn-sm mb-2" data-mdb-toggle="tooltip"
+                                                <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
                                                 title="Move to the wish list">
                                                 <i class="fas fa-heart"></i>
                                             </button>
@@ -70,7 +71,7 @@
                                             <div class="col-lg-4 col-md-6 mb-4 mb-lg-0 qty-container">
                                             <!-- Quantity -->
                                                 <div class="d-flex mb-4" style="max-width: 300px">
-                                                    <button class="btn btn-danger px-3 me-2 btn-minus" data-item-id="{{ $item->id }}">
+                                                    <button class="btn btn-primary px-3 me-2 btn-minus" data-item-id="{{ $item->id }}">
                                                     <i class="fas fa-minus"></i>
                                                     </button>
                                 
@@ -79,7 +80,7 @@
                                                     <label class="form-label" for="form1">Quantity</label>
                                                     </div>
                                 
-                                                    <button class="btn btn-danger px-3 ms-2 btn-plus" data-item-id="{{ $item->id }}">
+                                                    <button class="btn btn-primary px-3 ms-2 btn-plus" data-item-id="{{ $item->id }}">
                                                     <i class="fas fa-plus"></i>
                                                     </button>
                                                 </div>
@@ -94,12 +95,12 @@
                                         </div>
                                         <hr class="my-4" />
                                       @endforeach
-
+                            
                                       <!-- Single item -->
                                      
                                     </div>
                                   </div>
-                                  <div class="card mb-4">
+                                  <div class="card mb-4 shadow">
                                     <div class="card-body">
                                       <p><strong>Expected shipping delivery</strong></p>
                                       <p class="mb-0">12.10.2020 - 14.10.2020</p>
@@ -107,42 +108,49 @@
                                   </div>
                                 </div>
                                 <div class="col-md-4">
-                                  <div class="card mb-4">
+                                  <div class="card mb-4 shadow">
                                     <div class="card-header py-3">
                                       <h5 class="mb-0 font-weight-bold">Summary</h5>
                                     </div>
                                     <div class="card-body">
-                                      <ul class="list-group list-group-flush">
-                                        <li
-                                          class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
-                                          <span class="font-weight-bold">Products</span> 
-                                          <span class="total-amt">$53.98</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                                            <span class="font-weight-bold">Shipping</span> 
-                                          <span>{{ Auth::user()->name}}</span>
-                                        </li>
-                                        <li
-                                          class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-                                          <div>
-                                            <strong>Total amount</strong>
-                                            <strong>
-                                              <p class="mb-0">(including VAT)</p>
-                                            </strong>
+                                      <form action="">
+                                          <div class="form-group">
+                                            <label for="address" class="font-weight-bold">Delievery Address</label>
+                                            <textarea type="textarea" height="100" name="address" class="form-control" placeholder="Detailed Delivery Address"></textarea>
                                           </div>
-                                          <span><strong class="total-amt">$53.98</strong></span>
-                                        </li>
-                                      </ul>
-                          
-                                      <button type="button" class="btn btn-outline-danger btn-lg btn-block">
-                                        Go to checkout
-                                      </button>
+                                          <ul class="list-group list-group-flush">
+                                            <li
+                                              class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                              <span >Products</span> 
+                                              <p>Rs. <span class="total-amt"></span></p>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                <span >Shipping to</span> 
+                                              <span>{{ Auth::user()->name}}</span>
+                                            </li>
+                                            <li
+                                              class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                              <div>
+                                                <strong>Total amount</strong>
+                                                <strong>
+                                                  <p class="mb-0">(including VAT)</p>
+                                                </strong>
+                                              </div>
+                                              <p class="font-weight-bold">Rs. <span class="total-amt"></span></p>
+                                            </li>
+                                          </ul>
+                                          <input type="hidden" name="total_amount" class="total_amount">
+                                          <button type="submit" class="btn btn-primary btn-md btn-block">
+                                            CHECKOUT
+                                          </button>
+                                      </form>
+                                      
                                     </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </section>
+                        </section>
                     </div>
                 </div>
                 <script>
@@ -179,7 +187,8 @@
                                         total += parseFloat($(this).html());
                                     });
                                     
-                                    $('.total-amt').html('Total: ' + total);
+                                    $('.total-amt').html(total);
+                                    $('.total_amount').val(total);
                                 } else {
                                     alert("An error occurred while updating the quantity.");
                                 }
@@ -193,7 +202,8 @@
                     $('.amt').each(function(){
                         total += parseFloat($(this).html());
                     });
-                    $('.total-amt').html('Total: ' + total);
+                    $('.total-amt').html(total);
+                    $('.total_amount').val(total);
                 </script>
                 @include('layouts.customer.footer')
             </div>

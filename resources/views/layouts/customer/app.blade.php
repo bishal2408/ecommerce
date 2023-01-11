@@ -63,6 +63,7 @@
         .hot-product:hover {
             background-color: rgb(250, 242, 242);
         }
+        
     </style>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 </head>
