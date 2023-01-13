@@ -35,6 +35,21 @@
                                 <div class="row gx-4 gx-lg-5 align-items-center">
                                     <div class="col-md-6"><img class="card-img-top rounded-3 mb-5 mb-md-0" src="{{ $product->product_photo }}" alt="..." /></div>
                                     <div class="col-md-6">
+                                        <div class="star-rating">
+                                            <div class="rating" data-item-id="{{ $product->id }}">
+                                                <label for="rating1"><i  class="fa fa-star"></i></label>
+                                                <input type="radio"name="rating" id="rating1" value="1">
+                                                <label for="rating2"><i  class="fa fa-star"></i></label>
+                                                <input type="radio"name="rating" id="rating2" value="2">
+                                                <label for="rating3"><i  class="fa fa-star"></i></label>
+                                                <input type="radio"name="rating" id="rating3" value="3">
+                                                <label for="rating4"><i  class="fa fa-star"></i></label>
+                                                <input type="radio"name="rating" id="rating4" value="4">
+                                                <label for="rating5"><i  class="fa fa-star"></i></label>
+                                                <input type="radio"name="rating" id="rating5" value="5">
+                                            </div>
+
+                                        </div>
                                         <div class="small mb-1">By {{ $product->merchant->name }}</div>
                                         <h1 class="display-5 fw-bolder">{{ $product->name }}</h1>
                                         <div class="fs-5 mb-5">
@@ -77,9 +92,10 @@
                                                     Update cart
                                                 </button>
                                             @endif
-                                           
+
                                         </form>
                                     </div>
+                                   
                                 </div>
                             </div>
                         </section>
@@ -115,6 +131,28 @@
                     </div>
                 </div>
                 @include('layouts.customer.footer')
+                <script>
+                    $(document).ready(function() {
+                        $('input[type="radio"]').click(function() {
+                            var rating = $(this).val();
+                            var productId = $('.rating').data("item-id");
+                            $.ajax({
+                            url: "{{route('customer.rateProduct')}}",
+                            method: "POST",
+                            headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                data: {rating: rating, product_id: productId },
+                                success: function(data) {
+                                    if(data.status == "ok") {
+                                        console.log('success');
+                                    }
+                                }
+                            });
+                        });
+                    });
+                </script>
             </div>
         </div>
+
 @endsection

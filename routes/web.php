@@ -54,5 +54,8 @@ Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
         Route::delete('/remove-cart/{order}', [OrderController::class, 'delete'])->name('item.delete');
         Route::post('/update_qty', [OrderController::class, 'updateQty'])->name('update_qty');
         Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+        Route::get('/trackOrders', [CustomerHomeController::class, 'trackOrders'])->name('trackOrders');
+
+        Route::post('/rateProduct', [OrderController::class, 'rateProduct'])->name('rateProduct');
     });
 });

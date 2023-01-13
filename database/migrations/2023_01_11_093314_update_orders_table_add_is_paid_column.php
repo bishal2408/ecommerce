@@ -14,7 +14,7 @@ class UpdateOrdersTableAddIsPaidColumn extends Migration
     public function up()
     {
         Schema::table('orders', function(Blueprint $table) {
-            $table->string('is_paid')->after('order_status')->default(0);
+            $table->string('is_paid')->after('order_status')->default('Not paid');
         });
     }
 

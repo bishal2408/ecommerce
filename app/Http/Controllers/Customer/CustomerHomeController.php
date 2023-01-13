@@ -75,7 +75,10 @@ class CustomerHomeController extends Controller
             ->where('on_cart', Order::ADD_TO_CART)
             ->where('order_status', null)
             ->count();
-            $existingCartItem = Order::where('user_id', Auth::user()->id)->where('product_id', $product->id)->first();
+            $existingCartItem = Order::where('user_id', Auth::user()->id)
+                            ->where('product_id', $product->id)
+                            ->where('on_cart', Order::ADD_TO_CART)
+                            ->first();
             return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count'));
         }
         $existingCartItem = null;
@@ -91,5 +94,18 @@ class CustomerHomeController extends Controller
         $cart_count = $cart->count();
         $cart_items = $cart->get();
         return  view('customer.showCart', compact('cart_count', 'cart_items', 'address'));
+    }
+
+    public function trackOrders()
+    {
+        $cart_count = Order::where('user_id', Auth::user()->id)
+            ->where('on_cart', Order::ADD_TO_CART)
+            ->where('order_status', null)
+            ->count();
+        $track_order = Order::where('user_id', Auth::user()->id)
+                    ->where('order_status', Order::ORDER_ON_PROCESS);
+        $order_count = $track_order->count();
+        $orders = $track_order->latest()->get();
+        return view('customer.trackOrder', compact('orders', 'cart_count', 'order_count'));
     }
 }

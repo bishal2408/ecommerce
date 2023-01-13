@@ -11,6 +11,9 @@ class Order extends Model
     const REMOVE_FROM_CART = 0;
     const ORDER_ON_PROCESS = 'Onprocess';
     const ORDER_DELIVERED = 'Delivered';
+    const PAID_VIA_ESEWA = 'Paid via e-sewa';
+    const NOT_PAID = 'Not paid';
+    const PAID_VIA_CASH = "Paid via cash on delivery";
 
     use HasFactory;
     protected $fillable = [

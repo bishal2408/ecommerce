@@ -63,7 +63,18 @@
         .hot-product:hover {
             background-color: rgb(250, 242, 242);
         }
-        
+        .star-rating input {
+            display: none;
+        }
+        .star-rating label {
+            cursor: pointer;
+        }
+        .star-rating input:checked~ label {
+            color: #838383;
+        }
+        .star-rating label:active {
+            transform: scale(0.8);
+        }
     </style>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 </head>

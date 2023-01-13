@@ -7,6 +7,7 @@ use App\Http\Requests\QuantityRequest;
 use App\Http\Requests\UserAddressRequest;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Rating;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -74,13 +75,33 @@ class OrderController extends Controller
     public function delete(Order $order)
     {
         $order->delete();
-        return redirect()->back()->with('deleteMessage', 'Successfully removed from the cart!');
+        return redirect()->back()->with('deleteMessage', 'Successfully removed from the order list!');
     }
     public function updateQty(Request $request)
     {
         $order = Order::find($request->item_id);
         $order->quantity = $request->qty;
         $order->save();
+        return response()->json(["status" => "ok"]);
+    }
+    public function rateProduct(Request $request)
+    {
+        $rating = Rating::where('user_id', Auth::user()->id)
+                        ->where('product_id', $request->product_id)
+                        ->first();
+        if($rating === null)
+        {
+            Rating::create([
+                'user_id' => Auth::user()->id,
+                'rating' => $request->rating,
+                'product_id' => $request->product_id,
+            ]);
+        }
+        else {
+            $rating->update([
+                'rating' => $request->rating,
+            ]);
+        }
         return response()->json(["status" => "ok"]);
     }
 }
