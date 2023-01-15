@@ -57,5 +57,8 @@ Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
         Route::get('/trackOrders', [CustomerHomeController::class, 'trackOrders'])->name('trackOrders');
 
         Route::post('/rateProduct', [OrderController::class, 'rateProduct'])->name('rateProduct');
+
     });
 });
+Route::get('/products', [CustomerHomeController::class, 'viewAllProduct'])->name('products');
+

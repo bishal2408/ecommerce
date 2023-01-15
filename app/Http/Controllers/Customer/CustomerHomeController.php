@@ -11,7 +11,6 @@ use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFileTrait;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +29,8 @@ class CustomerHomeController extends Controller
         $this->user_photo_path = public_path('upload/user/photo/');
     }
 
+    // function that returns a collection of similar products that logged in user might like using similarity approach
+    // feed data 
     public function CosineSimilarProducts()
     {
         // retrieve the ratings of the logged-in user from the rating table
@@ -60,20 +61,21 @@ class CustomerHomeController extends Controller
                     {
                         $dotProduct += $loggedInUserRating->rating * $otherUsersRating->rating;
                         $magnitudeA += pow($loggedInUserRating->rating, 2);
-                        
                         $magnitudeB += pow($otherUsersRating->rating, 2);
                     }
                 }
             }
-
-            $similarityScore = $dotProduct / sqrt($magnitudeA * $magnitudeB);
-            $similarityScores[$productId] = $similarityScore;
+            if($magnitudeA!=0 && $magnitudeB != 0) {
+                $similarityScore = $dotProduct / sqrt($magnitudeA * $magnitudeB);
+                $similarityScores[$productId] = $similarityScore;
+            }
+            
         }
         //  order the products by their cosine similarity score and return the top N products to the user as recommendations
         arsort($similarityScores);
         // dd($similarityScores);
         $recommendedProductIds = array_keys($similarityScores);
-        $recommendedProducts = Product::whereIn('id', $recommendedProductIds)->take(5)->get();
+        $recommendedProducts = Product::whereIn('id', $recommendedProductIds)->take(4)->get();
         return  $recommendedProducts;
     }
 
@@ -164,5 +166,15 @@ class CustomerHomeController extends Controller
         $order_count = $track_order->count();
         $orders = $track_order->latest()->get();
         return view('customer.trackOrder', compact('orders', 'cart_count', 'order_count'));
+    }
+
+    public function viewAllProduct()
+    {
+        $products = Product::get();
+        $cart_count = Order::where('user_id', Auth::user()->id)
+        ->where('on_cart', Order::ADD_TO_CART)
+        ->where('order_status', null)
+        ->count();
+        return view('customer.allProduct', compact('products', 'cart_count'));
     }
 }
