@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Rating;
 use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
@@ -75,14 +76,19 @@ class CustomerHomeController extends Controller
             ->where('on_cart', Order::ADD_TO_CART)
             ->where('order_status', null)
             ->count();
+            $user_rating = Rating::where('user_id', Auth::user()->id)
+                            ->where('product_id', $product->id)
+                            ->pluck('rating')
+                            ->first();
             $existingCartItem = Order::where('user_id', Auth::user()->id)
                             ->where('product_id', $product->id)
                             ->where('on_cart', Order::ADD_TO_CART)
                             ->first();
-            return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count'));
+            return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count', 'user_rating'));
         }
         $existingCartItem = null;
-        return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem'));
+        $user_rating = null;
+        return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'user_rating'));
     }
     
     public function showCart()

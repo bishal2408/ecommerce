@@ -38,15 +38,15 @@
                                         <div class="star-rating">
                                             <div class="rating" data-item-id="{{ $product->id }}">
                                                 <label for="rating1"><i  class="fa fa-star"></i></label>
-                                                <input type="radio"name="rating" id="rating1" value="1">
+                                                <input type="radio" name="rating" id="rating1" value="1" @if ($user_rating == 1) checked @endif>
                                                 <label for="rating2"><i  class="fa fa-star"></i></label>
-                                                <input type="radio"name="rating" id="rating2" value="2">
+                                                <input type="radio" name="rating" id="rating2" value="2" @if ($user_rating == 2) checked @endif>
                                                 <label for="rating3"><i  class="fa fa-star"></i></label>
-                                                <input type="radio"name="rating" id="rating3" value="3">
+                                                <input type="radio" name="rating" id="rating3" value="3" @if ($user_rating == 3) checked @endif>
                                                 <label for="rating4"><i  class="fa fa-star"></i></label>
-                                                <input type="radio"name="rating" id="rating4" value="4">
+                                                <input type="radio" name="rating" id="rating4" value="4" @if ($user_rating == 4) checked @endif>
                                                 <label for="rating5"><i  class="fa fa-star"></i></label>
-                                                <input type="radio"name="rating" id="rating5" value="5">
+                                                <input type="radio" name="rating" id="rating5" value="5" @if ($user_rating == 5) checked @endif>
                                             </div>
 
                                         </div>
@@ -56,14 +56,14 @@
                                             <span class="text-decoration-line-through">Rs.45.00</span>
                                             <span class="badge badge-danger">Rs. {{ $product->price }}</span>
                                         </div>
-                                        <p class="lead">{{ $product->description }}</p>
+                                        <p class="lead">{{ $product->description }}</p>         
                                         @if ($existingCartItem == null)
                                             <form action="{{ route('customer.addProductToCart', ['product'=> $product->id]) }}" method="POST"class="d-flex">
                                         @else
                                             <form action="{{ route('customer.updateProductQuantity', ['order'=> $existingCartItem->id]) }}" method="POST" class="d-flex">
                                         @endif
                                             @csrf
-                                            @if ($existingCartItem == null)
+                                            @if ($existingCartItem == null) 
                                                 <input name="quantity" class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
                                                 @error('quantity')
                                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">

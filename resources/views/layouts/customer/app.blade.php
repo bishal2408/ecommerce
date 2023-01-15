@@ -69,7 +69,10 @@
         .star-rating label {
             cursor: pointer;
         }
-        .star-rating input:checked~ label {
+        .star-rating label{
+            color: goldenrod;
+        }
+        .star-rating input:checked ~ label {
             color: #838383;
         }
         .star-rating label:active {
