@@ -11,8 +11,10 @@ use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFileTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomerHomeController extends Controller
 {
@@ -28,17 +30,66 @@ class CustomerHomeController extends Controller
         $this->user_photo_path = public_path('upload/user/photo/');
     }
 
+    public function CosineSimilarProducts()
+    {
+        // retrieve the ratings of the logged-in user from the rating table
+        $loggedInUserRatings = Rating::where('user_id', Auth::id())->get();
+
+        //  use the DB::raw() method to retrieve the average rating of the products that the logged-in user has not rated yet
+        $averageProductRatings = DB::table('ratings')
+                ->select(DB::raw('product_id, AVG(rating) as avg_rating'))
+                ->whereNotIn('product_id', $loggedInUserRatings->pluck('product_id'))
+                ->groupBy('product_id')
+                ->get();
+        // similarity algorithm to calculate the similarity between the logged-in user's ratings and the ratings of other users
+        $similarityScores = [];
+        foreach($averageProductRatings as $rating)
+        {
+            $productId = $rating->product_id;
+            $otherUsersRatings = Rating::where('product_id', $productId)->where('user_id', '!=', Auth::id())->get();
+            $dotProduct = 0;
+            $magnitudeA = 0;
+            $magnitudeB = 0;
+
+            //Calculating dot product
+            foreach($loggedInUserRatings as $loggedInUserRating)
+            {
+                foreach($otherUsersRatings as $otherUsersRating)
+                {
+                    if($loggedInUserRating->product_id != $otherUsersRating->product_id)
+                    {
+                        $dotProduct += $loggedInUserRating->rating * $otherUsersRating->rating;
+                        $magnitudeA += pow($loggedInUserRating->rating, 2);
+                        
+                        $magnitudeB += pow($otherUsersRating->rating, 2);
+                    }
+                }
+            }
+
+            $similarityScore = $dotProduct / sqrt($magnitudeA * $magnitudeB);
+            $similarityScores[$productId] = $similarityScore;
+        }
+        //  order the products by their cosine similarity score and return the top N products to the user as recommendations
+        arsort($similarityScores);
+        // dd($similarityScores);
+        $recommendedProductIds = array_keys($similarityScores);
+        $recommendedProducts = Product::whereIn('id', $recommendedProductIds)->take(5)->get();
+        return  $recommendedProducts;
+    }
+
     // user landing page
     public function index()
     {
         $hot_deals = Product::select('id', 'name', 'description', 'price', 'photo')->take(7)->get();
         if(Auth::user()!= null){
+            $cosineRecommendations = $this->CosineSimilarProducts();
             $cart_count = Order::where('user_id', Auth::user()->id)
                     ->where('on_cart', Order::ADD_TO_CART)
                     ->where('order_status', null)
                     ->count();
-            return view('welcome', compact('hot_deals', 'cart_count'));
+            return view('welcome', compact('hot_deals', 'cart_count', 'cosineRecommendations'));
         }
+        
         return view('welcome', compact('hot_deals')); 
     }
 
@@ -67,7 +118,7 @@ class CustomerHomeController extends Controller
         $this->guard()->login($user);
         return redirect('/checkrole');
     }
-
+    // show product page
     public function showProduct(Product $product)
     {
         $related_products = Product::select('id', 'name', 'description', 'price', 'photo')->take(4)->get();
@@ -90,7 +141,7 @@ class CustomerHomeController extends Controller
         $user_rating = null;
         return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'user_rating'));
     }
-    
+    // show cart page
     public function showCart()
     {
         $cart = Order::where('user_id', Auth::user()->id)
@@ -101,7 +152,7 @@ class CustomerHomeController extends Controller
         $cart_items = $cart->get();
         return  view('customer.showCart', compact('cart_count', 'cart_items', 'address'));
     }
-
+    // track order page
     public function trackOrders()
     {
         $cart_count = Order::where('user_id', Auth::user()->id)

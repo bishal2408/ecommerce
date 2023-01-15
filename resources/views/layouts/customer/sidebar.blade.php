@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-white sidebar sidebar-light accordion position-fixed" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-white sidebar sidebar-light accordion position-fixed " id="accordionSidebar">
     
     <!-- Sidebar - Brand -->
     <a href="{{ route('user.home') }}" class="sidebar-brand d-flex align-items-center justify-content-center my-3">

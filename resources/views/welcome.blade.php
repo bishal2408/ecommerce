@@ -7,7 +7,7 @@
             @include('layouts.customer.sidebar')
     
             <!-- Content Wrapper -->
-            <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 15vw;">
+            <div id="content-wrapper" class="d-flex flex-column" style="margin-left: 17vw;">
     
                 <!-- Main Content -->
                 <div id="content">
@@ -15,7 +15,7 @@
                     @include('layouts.customer.navbar')
                     <div class="container">
                         {{-- carousel and below ad content --}}
-                        <div class="row px-4 py-2">
+                        <div class="row p-3">
                             <div class="col-lg-8">
                                 <div id="carouselExampleControls" class="carousel slide w-100 mb-4" data-interval="false" >
                                     <div class="carousel-inner">
@@ -78,7 +78,7 @@
                                 </div>
                             </div>
                             {{-- hot deals --}}
-                            <div class="col-lg-4">
+                            <div class="col-lg-4 ">
                                 <h6 class="font-weight-bolder mb-3 text-lg">Hot Deal</h6>
                                 <div class="hot-deals">
                                     @foreach ($hot_deals as $product)
@@ -102,7 +102,7 @@
                         {{-- another section --}}
                         <section class="my-4">
                             <h3 class="text-center mb-5"><strong>Our Merchants</strong></h3>
-                            <div class="container d-flex flex-wrap">
+                            <div class="container text-center d-flex flex-wrap">
                                 <div class="mr-3 mb-4">
                                     <a href="" class="text-danger">
                                         <img width="200" height="160" class="rounded-3" src="https://img.freepik.com/premium-photo/fashionable-awesome-tanned-curly-man-brown-jacket-trendy-sunglasses-wear-classic-hat-posing-isolated-beige-pastel-background-fashion-new-collection-offer-retro-style-concept-free-place-ad_163305-156833.jpg" alt="merchant photo">
@@ -127,7 +127,7 @@
                                         <div><span class="font-weight-bold">Merchant name</span></div>
                                     </a>
                                 </div>
-                                <div class="mr-3 mb-4">
+                                <div class=" mb-4">
                                     <a href="" class="text-danger">
                                         <img width="200" height="160" class="rounded-3" src="https://img.freepik.com/premium-photo/fashionable-awesome-tanned-curly-man-brown-jacket-trendy-sunglasses-wear-classic-hat-posing-isolated-beige-pastel-background-fashion-new-collection-offer-retro-style-concept-free-place-ad_163305-156833.jpg" alt="merchant photo">
                                         <div><span class="font-weight-bold">Merchant name</span></div>
@@ -135,9 +135,37 @@
                                 </div>
                             </div>
                         </section>
-
                         {{-- recomendation section --}}
-                        
+                        @auth
+                            <section class="bg-light mt-3">
+                                <div class="container px-4 px-lg-5 mt-5">
+                                    <h2 class="fw-bolder mb-5 text-center">Recommendations</h2>
+                                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                                        @foreach ($cosineRecommendations as $recommendation)
+                                        <div class="col mb-5">
+                                            <div class="card h-100">
+                                                <!-- Product image-->
+                                                <img style="object-fit: cover;" height="180" class="card-img-top" src="{{ $recommendation->product_photo }}" alt="..." />
+                                                <!-- Product details-->
+                                                <div class="card-body p-0 m-0">
+                                                    <div class="text-center">
+                                                        <h5 class="fw-bolder mt-2">{{ $recommendation->name }}</h5>
+                                                        <p class="lead hot-product-desc ml-2 mb-2" style="font-size: 12px;">{{ $recommendation->description }}</p>
+                                                        <!-- Product price-->
+                                                        <span class="badge badge-danger mb-2">Rs. {{ $recommendation->price }}</span>
+                                                    </div>
+                                                </div>
+                                                <!-- Product actions-->
+                                                <div class="card-footer border-top-0 bg-transparent">
+                                                    <div class="text-center"><a class="btn btn-outline-danger rounded-2 mt-auto" href="{{ route('customer.showProduct', ['product'=>$recommendation->id]) }}">Shop Now</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </section>
+                            @endauth                        
                     </div>
                 </div>
                 @include('layouts.customer.footer')
