@@ -30,7 +30,6 @@ class CustomerHomeController extends Controller
     }
 
     // function that returns a collection of similar products that logged in user might like using similarity approach
-    // feed data 
     public function CosineSimilarProducts()
     {
         // retrieve the ratings of the logged-in user from the rating table
