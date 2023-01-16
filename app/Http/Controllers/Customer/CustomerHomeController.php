@@ -72,7 +72,7 @@ class CustomerHomeController extends Controller
         }
         //  order the products by their cosine similarity score and return the top N products to the user as recommendations
         arsort($similarityScores);
-        // dd($similarityScores);
+        dd($similarityScores);
         $recommendedProductIds = array_keys($similarityScores);
         $recommendedProducts = Product::whereIn('id', $recommendedProductIds)->take(4)->get();
         return  $recommendedProducts;
@@ -119,8 +119,8 @@ class CustomerHomeController extends Controller
         $this->guard()->login($user);
         return redirect('/checkrole');
     }
-    // show product page
-    public function showProduct(Product $product)
+    // show product detail
+    public function showProductDetail(Product $product)
     {
         $related_products = Product::select('id', 'name', 'description', 'price', 'photo')->take(4)->get();
         if(Auth::user() != null){
@@ -166,7 +166,7 @@ class CustomerHomeController extends Controller
         $orders = $track_order->latest()->get();
         return view('customer.trackOrder', compact('orders', 'cart_count', 'order_count'));
     }
-
+    // show all products
     public function viewAllProduct()
     {
         $products = Product::get();

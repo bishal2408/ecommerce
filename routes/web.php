@@ -46,7 +46,7 @@ Route::get('/subcategories/{id}', [ProductCategoryController::class, 'getSubcate
 Route::post('/customerRegister', [CustomerHomeController::class, 'customerRegister'])->name('customerRegister');
 
 Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
-    Route::get('showProduct/{product}', [CustomerHomeController::class, 'showProduct'])->name('showProduct');
+    Route::get('showProduct/{product}', [CustomerHomeController::class, 'showProductDetail'])->name('showProduct');
     Route::middleware('auth')->group(function(){
         Route::post('/add-cart/{product}', [OrderController::class,  'addProductToCart'])->name('addProductToCart');
         Route::post('/update-quantity/{order}/', [OrderController::class,  'updateProductQuantity'])->name('updateProductQuantity');
