@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('merchant_id', Auth::user()->id)->latest()->get();
+        $products = Product::where('merchant_id', Auth::user()->id)->latest()->paginate(10);
         return view('merchant.product.index', compact('products'));
     }
 

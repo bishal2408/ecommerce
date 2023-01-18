@@ -78,9 +78,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div class="float-right">
-                            
+                            <div class="float-right">
+                                {{ $products->links() }}
+                            </div>
                         </div>
                     </div>
                 </div>
