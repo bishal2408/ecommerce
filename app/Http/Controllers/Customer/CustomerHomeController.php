@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ProductCategory;
+use App\Models\ProductSubCategory;
 use App\Models\Rating;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -174,5 +176,22 @@ class CustomerHomeController extends Controller
         ->where('order_status', null)
         ->count();
         return view('customer.allProduct', compact('products', 'cart_count'));
+    }
+
+    // show according to categories
+    public function showCategory($id)
+    {
+        $category_name = ProductCategory::where('id', $id)->pluck('name')->first();
+        $products = Product::where('category_id', $id)->orderBy('sub_category_id', 'ASC')->get();
+        $subcategories = ProductSubCategory::where('category_id', $id)->orderBy('id', 'ASC')->select('id', 'name')->get();
+
+        if(Auth::user()!= null){
+            $cart_count = Order::where('user_id', Auth::user()->id)
+                    ->where('on_cart', Order::ADD_TO_CART)
+                    ->where('order_status', null)
+                    ->count();
+            return view('customer.showCategory', compact('products', 'subcategories', 'category_name', 'cart_count'));
+        }
+        return view('customer.showCategory', compact('products', 'subcategories', 'category_name'));
     }
 }

@@ -17,36 +17,15 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
     <!-- Nav Item - Dashboard -->
+    @foreach ($categories as $category)
     <li class="nav-item px-2">
-        <a class="nav-link" href="ss">
+        <a class="nav-link" href="{{ route('customer.show.category', ['id'=>$category->id]) }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Electronics</span>
+            <span class="name">{{ $category->name }}</span>
         </a>
     </li>
-    <li class="nav-item px-2">
-        <a class="nav-link" href="ss">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Games & Entertainment</span>
-        </a>
-    </li>
-    <li class="nav-item px-2">
-        <a class="nav-link" href="ss">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Life Style</span>
-        </a>
-    </li>
-    <li class="nav-item px-2">
-        <a class="nav-link" href="ss">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Headphones</span>
-        </a>
-    </li>
-    <li class="nav-item px-2">
-        <a class="nav-link" href="ss">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Home equipments</span>
-        </a>
-    </li>
+    @endforeach
+
     
     <!-- Divider -->
     <hr class="sidebar-divider">
