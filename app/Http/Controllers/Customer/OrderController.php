@@ -7,6 +7,7 @@ use App\Http\Requests\QuantityRequest;
 use App\Http\Requests\UserAddressRequest;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Purchase;
 use App\Models\Rating;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
@@ -63,13 +64,20 @@ class OrderController extends Controller
                     ->where('on_cart', Order::ADD_TO_CART)
                     ->where('order_status', null)
                     ->get();
+        $items = '';
         foreach($orders as $order)
         {
+            $itemId = strval($order->product->id).',';
+            $items .= $itemId;
             $order->update([
                 'on_cart' => Order::REMOVE_FROM_CART,
                 'order_status'=> Order::ORDER_ON_PROCESS,
             ]);
         }
+        $items = substr($items, 0, -1);
+        Purchase::create([
+            'items' => $items,
+        ]);
         return redirect()->back()->with('orderMessage', 'Your Orders has been placed!!');
     }
     public function delete(Order $order)

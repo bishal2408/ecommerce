@@ -21,7 +21,7 @@
                                 <div class="col mb-5">
                                     <div class="card h-100">
                                         <!-- Product image-->
-                                        <img style="object-fit: cover;" height="180" class="card-img-top" src="{{ $product->product_photo }}" alt="..." />
+                                        <img style="height: 35vh; object-fit: cover;"class="card-img-top" src="{{ $product->product_photo }}" alt="..." />
                                         <!-- Product details-->
                                         <div class="card-body p-0 m-0">
                                             <div class="text-center">

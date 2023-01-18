@@ -50,7 +50,7 @@
         }
         .hot-product-img {
             width: 30%;
-            height: 13vh;
+            height: auto;
             object-fit: cover;
             overflow: hidden;
         }
@@ -77,6 +77,12 @@
         }
         .star-rating label:active {
             transform: scale(0.8);
+        }
+        .product-image {
+            width: 80%;
+            object-fit: cover;
+            float: right;
+            margin: auto;
         }
     </style>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>

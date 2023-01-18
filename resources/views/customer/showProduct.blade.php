@@ -33,8 +33,8 @@
                             @endif
                             <div class="container px-4 px-lg-5">
                                 <div class="row gx-4 gx-lg-5 align-items-center">
-                                    <div class="col-md-6"><img class="card-img-top rounded-3 mb-5 mb-md-0" src="{{ $product->product_photo }}" alt="..." /></div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4"><img class="card-img-top product-image rounded-3 mb-5 mb-md-0" src="{{ $product->product_photo }}" alt="..." /></div>
+                                    <div class="col-md-8">
                                         <div class="star-rating">
                                             <div class="rating" data-item-id="{{ $product->id }}">
                                                 <label for="rating1"><i  class="fa fa-star"></i></label>

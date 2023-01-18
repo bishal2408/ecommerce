@@ -72,7 +72,7 @@ class CustomerHomeController extends Controller
         }
         //  order the products by their cosine similarity score and return the top N products to the user as recommendations
         arsort($similarityScores);
-        dd($similarityScores);
+        // dd($similarityScores);
         $recommendedProductIds = array_keys($similarityScores);
         $recommendedProducts = Product::whereIn('id', $recommendedProductIds)->take(4)->get();
         return  $recommendedProducts;
@@ -81,7 +81,7 @@ class CustomerHomeController extends Controller
     // user landing page
     public function index()
     {
-        $hot_deals = Product::select('id', 'name', 'description', 'price', 'photo')->take(7)->get();
+        $hot_deals = Product::select('id', 'name', 'description', 'price', 'photo')->take(6)->get();
         if(Auth::user()!= null){
             $cosineRecommendations = $this->CosineSimilarProducts();
             $cart_count = Order::where('user_id', Auth::user()->id)
@@ -90,7 +90,6 @@ class CustomerHomeController extends Controller
                     ->count();
             return view('welcome', compact('hot_deals', 'cart_count', 'cosineRecommendations'));
         }
-        
         return view('welcome', compact('hot_deals')); 
     }
 
