@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductSubCategory;
+use App\Models\Purchase;
 use App\Models\Rating;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -16,6 +17,8 @@ use App\Traits\UploadFileTrait;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
+use Phpml\Association\Apriori;
 
 class CustomerHomeController extends Controller
 {
@@ -80,6 +83,38 @@ class CustomerHomeController extends Controller
         return  $recommendedProducts;
     }
 
+    public function AprioriAssociation($id)
+    {
+        $apriori = new Apriori($support = 0.03, $confidence = 0.5);
+
+        // get the purchase data from the database
+        $purchases = Purchase::all();
+
+        // format the data for the Apriori algorithm
+        $data = array();
+        foreach ($purchases as $purchase) {
+            $data[] = explode(',', $purchase->items);
+        }
+        $labels = [];
+        // set the minimum support and confidence
+        $apriori->train($data,  $labels);
+
+        // generate the association rules
+        $rules = $apriori->getRules();
+        // filter the rules to find the ones that include the product being viewed
+        $recommendations = array();
+        foreach ($rules as $rule) {
+            if (in_array($id, $rule['antecedent'])) {
+                $recommendations = array_merge($recommendations, $rule['consequent']);
+            }
+        }
+        // remove duplicates from the recommendations
+        $recommendations = array_unique($recommendations);
+        // get the product details for the recommendations
+        $products = Product::whereIn('id', $recommendations)->get();
+        return $products;
+    }
+    
     // user landing page
     public function index()
     {
@@ -123,6 +158,7 @@ class CustomerHomeController extends Controller
     // show product detail
     public function showProductDetail(Product $product)
     {
+        $associated_products = $this->AprioriAssociation($product->id);
         $related_products = Product::select('id', 'name', 'description', 'price', 'photo')->take(4)->get();
         if(Auth::user() != null){
             $cart_count = Order::where('user_id', Auth::user()->id)
@@ -137,11 +173,11 @@ class CustomerHomeController extends Controller
                             ->where('product_id', $product->id)
                             ->where('on_cart', Order::ADD_TO_CART)
                             ->first();
-            return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count', 'user_rating'));
+            return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count', 'user_rating', 'associated_products'));
         }
         $existingCartItem = null;
         $user_rating = null;
-        return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'user_rating'));
+        return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'user_rating', 'associated_products'));
     }
     // show cart page
     public function showCart()

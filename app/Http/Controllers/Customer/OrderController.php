@@ -92,6 +92,7 @@ class OrderController extends Controller
         $order->save();
         return response()->json(["status" => "ok"]);
     }
+    
     public function rateProduct(Request $request)
     {
         $rating = Rating::where('user_id', Auth::user()->id)
