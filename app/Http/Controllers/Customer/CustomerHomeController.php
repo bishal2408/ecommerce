@@ -14,6 +14,7 @@ use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\UploadFileTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,9 +34,13 @@ class CustomerHomeController extends Controller
     {   
         $this->user_photo_path = public_path('upload/user/photo/');
     }
-
-    // function that returns a collection of similar products that logged in user might like using similarity approach
-    public function CosineSimilarProducts()
+    
+    /**
+     *  function that returns a collection of similar products that logged in user might like using similarity approach
+     *
+     * @return Collection 
+     */
+    public function CosineSimilarProducts(): Collection
     {
         // retrieve the ratings of the logged-in user from the rating table
         $loggedInUserRatings = Rating::where('user_id', Auth::id())->get();
@@ -83,6 +88,13 @@ class CustomerHomeController extends Controller
         return  $recommendedProducts;
     }
 
+    /**
+     *  function to find associations according to transactions in purchase table in database
+     *  target a particular product and return product recomendations according to the associations
+     *  @param  $id
+     *  @return Collection of products
+     */
+
     public function AprioriAssociation($id)
     {
         $apriori = new Apriori($support = 0.03, $confidence = 0.5);
@@ -97,7 +109,7 @@ class CustomerHomeController extends Controller
         }
         $labels = [];
         // set the minimum support and confidence
-        $apriori->train($data,  $labels);
+        $apriori->train($data, $labels);
 
         // generate the association rules
         $rules = $apriori->getRules();
@@ -115,7 +127,10 @@ class CustomerHomeController extends Controller
         return $products;
     }
     
-    // user landing page
+    /**
+     * user landing page 
+    */ 
+
     public function index()
     {
         $hot_deals = Product::select('id', 'name', 'description', 'price', 'photo')->take(6)->get();
@@ -130,12 +145,19 @@ class CustomerHomeController extends Controller
         return view('welcome', compact('hot_deals')); 
     }
 
-    // for cutomer registration 
+    /**
+     * for cutomer registration 
+    */ 
+
     protected function guard()
     {
         return Auth::guard();
     }
     
+    /**
+     * @param Request $request
+     */
+
     public function customerRegister(Request $request)
     {
         $request->validate([
@@ -155,11 +177,20 @@ class CustomerHomeController extends Controller
         $this->guard()->login($user);
         return redirect('/checkrole');
     }
-    // show product detail
+
+    /**
+     * Show details of particular products
+     * @param Product $product
+     */
+
     public function showProductDetail(Product $product)
     {
         $associated_products = $this->AprioriAssociation($product->id);
-        $related_products = Product::select('id', 'name', 'description', 'price', 'photo')->take(4)->get();
+        $similar_products = Product::where('category_id', $product->category_id)
+                        ->select('id', 'name', 'description', 'price', 'photo')
+                        ->inRandomOrder()
+                        ->take(4)
+                        ->get();
         if(Auth::user() != null){
             $cart_count = Order::where('user_id', Auth::user()->id)
             ->where('on_cart', Order::ADD_TO_CART)
@@ -173,13 +204,17 @@ class CustomerHomeController extends Controller
                             ->where('product_id', $product->id)
                             ->where('on_cart', Order::ADD_TO_CART)
                             ->first();
-            return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'cart_count', 'user_rating', 'associated_products'));
+            return view('customer.showProduct', compact('product', 'similar_products', 'existingCartItem', 'cart_count', 'user_rating', 'associated_products'));
         }
         $existingCartItem = null;
         $user_rating = null;
-        return view('customer.showProduct', compact('product', 'related_products', 'existingCartItem', 'user_rating', 'associated_products'));
+        return view('customer.showProduct', compact('product', 'similar_products', 'existingCartItem', 'user_rating', 'associated_products'));
     }
-    // show cart page
+
+    /**
+     * show cart page
+    */
+
     public function showCart()
     {
         $cart = Order::where('user_id', Auth::user()->id)
@@ -190,7 +225,11 @@ class CustomerHomeController extends Controller
         $cart_items = $cart->get();
         return  view('customer.showCart', compact('cart_count', 'cart_items', 'address'));
     }
-    // track order page
+
+    /** 
+     * track order page
+    */ 
+
     public function trackOrders()
     {
         $cart_count = Order::where('user_id', Auth::user()->id)
@@ -203,7 +242,11 @@ class CustomerHomeController extends Controller
         $orders = $track_order->latest()->get();
         return view('customer.trackOrder', compact('orders', 'cart_count', 'order_count'));
     }
-    // show all products
+
+    /**
+     * show all products
+    */
+
     public function viewAllProduct()
     {
         $products = Product::get();
@@ -214,7 +257,11 @@ class CustomerHomeController extends Controller
         return view('customer.allProduct', compact('products', 'cart_count'));
     }
 
-    // show according to categories
+    /**
+     * show according to categories
+     * @param $id
+    */ 
+    
     public function showCategory($id)
     {
         $category_name = ProductCategory::where('id', $id)->pluck('name')->first();
