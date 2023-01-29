@@ -3,6 +3,7 @@
 use App\Http\Controllers\Customer\CustomerHomeController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Merchant\ApproveController;
 use App\Http\Controllers\Merchant\ProductCategoryController;
 use App\Http\Controllers\Merchant\ProductSubCategoryController;
 use GuzzleHttp\Middleware;
@@ -37,9 +38,12 @@ Route::group(['prefix'=>'merchant', 'as'=>'merchant.', 'middleware'=>'isMerchant
     Route::get('/subCategory/delete/{id}', [ProductSubCategoryController::class, 'singleDelete'])->name('sub-category.delete');
     // merchant settings
     Route::resource('setting',\App\Http\Controllers\Merchant\MerchantSettingController::class);
-
     // product
     Route::resource('product', \App\Http\Controllers\Merchant\ProductController::class);
+    // approve
+    Route::get('/approve-order', [ApproveController::class, 'index'])->name('approve.index');
+    Route::get('/approve-delivery/{id}', [ApproveController::class, 'approveDelivery'])->name('approve.delivery');
+
 });
 
 Route::get('/subcategories/{id}', [ProductCategoryController::class, 'getSubcategories']);

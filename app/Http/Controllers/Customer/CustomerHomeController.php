@@ -186,7 +186,8 @@ class CustomerHomeController extends Controller
     public function showProductDetail(Product $product)
     {
         $associated_products = $this->AprioriAssociation($product->id);
-        $similar_products = Product::where('category_id', $product->category_id)
+        $similar_products = Product::where('sub_category_id', $product->sub_category_id)
+                        ->whereNotIn('id', [$product->id])
                         ->select('id', 'name', 'description', 'price', 'photo')
                         ->inRandomOrder()
                         ->take(4)
@@ -261,7 +262,7 @@ class CustomerHomeController extends Controller
      * show according to categories
      * @param $id
     */ 
-    
+
     public function showCategory($id)
     {
         $category_name = ProductCategory::where('id', $id)->pluck('name')->first();

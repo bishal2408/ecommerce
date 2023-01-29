@@ -53,4 +53,8 @@ class User extends Authenticatable
         return asset('upload/user/photo/')."/".$this->photo;
     }
 
+    public function userAddress()
+    {
+        return $this->hasOne(UserAddress::class);
+    }
 }
