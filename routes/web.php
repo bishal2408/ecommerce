@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Merchant\ApproveController;
 use App\Http\Controllers\Merchant\ProductCategoryController;
 use App\Http\Controllers\Merchant\ProductSubCategoryController;
+use App\Http\Controllers\Merchant\UserDemographicsController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +45,8 @@ Route::group(['prefix'=>'merchant', 'as'=>'merchant.', 'middleware'=>'isMerchant
     Route::get('/approve-order', [ApproveController::class, 'index'])->name('approve.index');
     Route::get('/approve-delivery/{id}', [ApproveController::class, 'approveDelivery'])->name('approve.delivery');
 
+    Route::get('/demographics-analysis', [UserDemographicsController::class, 'index'])->name('user.demographics');
+
 });
 
 Route::get('/subcategories/{id}', [ProductCategoryController::class, 'getSubcategories']);
@@ -59,11 +62,11 @@ Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
         Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
         Route::get('/clear-history', [OrderController::class, 'clearHistory'])->name('clear.history');
         Route::delete('/remove-history/{order}', [OrderController::class, 'deleteHistory'])->name('item.deleteHistory');
+        Route::post('/rateProduct', [OrderController::class, 'rateProduct'])->name('rateProduct');
 
         Route::get('/trackOrders', [CustomerHomeController::class, 'trackOrders'])->name('trackOrders');
         Route::get('/orderHistory', [CustomerHomeController::class, 'orderHistory'])->name('orderHistory');
         Route::get('cart', [CustomerHomeController::class, 'showCart'])->name('show.cart');
-        Route::post('/rateProduct', [OrderController::class, 'rateProduct'])->name('rateProduct');
     });
     Route::get('/product-category/{id}', [CustomerHomeController::class, 'showCategory'])->name('show.category');
 

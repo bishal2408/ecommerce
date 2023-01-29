@@ -21,8 +21,8 @@
     </li>
     <hr class="sidebar-divider">
 
-    <li class="nav-item">
-        <a class="nav-link" href="#">
+    <li class="nav-item @if (Route::is('merchant.user.demographics')) active @endif">
+        <a class="nav-link" href="{{ route('merchant.user.demographics') }}">
             <i class="fas fa-fw fa-user-alt"></i>
             <span>User Demographics </span></a>
     </li>
@@ -42,7 +42,7 @@
             <span>Product</span>
         </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item @if (Route::is('merchant.approve*')) active @endif">
         <a class="nav-link" href="{{ route('merchant.approve.index') }}">
             <i class="fas fa-fw fa-list-alt"></i>
             <span>Approve Order</span>
