@@ -85,6 +85,23 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->back()->with('deleteMessage', 'Successfully removed from the order list!');
     }
+    public function deleteHistory(Order $order)
+    {
+        $order->delete();
+        return redirect()->back()->with('deleteMessage', 'Purchase history removed!!');
+    }
+    public function clearHistory()
+    {
+        $orders = Order::where('user_id', Auth::id())
+                    ->where('order_status', Order::ORDER_DELIVERED)
+                    ->get();
+        foreach($orders as $order)
+        {
+            $order->delete();
+        }
+        return redirect()->back()->with('deleteMessage', 'Order History Cleared!!');
+    }
+
     public function updateQty(Request $request)
     {
         $order = Order::find($request->item_id);

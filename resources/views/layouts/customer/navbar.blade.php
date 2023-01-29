@@ -76,7 +76,7 @@
                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                         Track Your Orders
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{{ route('customer.orderHistory') }}">
                         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                         Your Order History
                     </a>

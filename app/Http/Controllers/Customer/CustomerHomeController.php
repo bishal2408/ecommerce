@@ -97,7 +97,7 @@ class CustomerHomeController extends Controller
 
     public function AprioriAssociation($id)
     {
-        $apriori = new Apriori($support = 0.03, $confidence = 0.5);
+        $apriori = new Apriori($support = 0.03, $confidence = 0.2);
 
         // get the purchase data from the database
         $purchases = Purchase::all();
@@ -277,5 +277,18 @@ class CustomerHomeController extends Controller
             return view('customer.showCategory', compact('products', 'subcategories', 'category_name', 'cart_count'));
         }
         return view('customer.showCategory', compact('products', 'subcategories', 'category_name'));
+    }
+
+    public function orderHistory()
+    {
+        $cart_count = Order::where('user_id', Auth::user()->id)
+            ->where('on_cart', Order::ADD_TO_CART)
+            ->where('order_status', null)
+            ->count();
+        $order_history = Order::where('user_id', Auth::user()->id)
+                    ->where('order_status', Order::ORDER_DELIVERED);
+        $order_count = $order_history->count();
+        $orders = $order_history->latest()->get();
+        return view('customer.orderHistory', compact('orders', 'cart_count', 'order_count'));
     }
 }

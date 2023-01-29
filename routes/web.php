@@ -54,12 +54,15 @@ Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
     Route::middleware('auth')->group(function(){
         Route::post('/add-cart/{product}', [OrderController::class,  'addProductToCart'])->name('addProductToCart');
         Route::post('/update-quantity/{order}/', [OrderController::class,  'updateProductQuantity'])->name('updateProductQuantity');
-        Route::get('cart', [CustomerHomeController::class, 'showCart'])->name('show.cart');
         Route::delete('/remove-cart/{order}', [OrderController::class, 'delete'])->name('item.delete');
         Route::post('/update_qty', [OrderController::class, 'updateQty'])->name('update_qty');
         Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-        Route::get('/trackOrders', [CustomerHomeController::class, 'trackOrders'])->name('trackOrders');
+        Route::get('/clear-history', [OrderController::class, 'clearHistory'])->name('clear.history');
+        Route::delete('/remove-history/{order}', [OrderController::class, 'deleteHistory'])->name('item.deleteHistory');
 
+        Route::get('/trackOrders', [CustomerHomeController::class, 'trackOrders'])->name('trackOrders');
+        Route::get('/orderHistory', [CustomerHomeController::class, 'orderHistory'])->name('orderHistory');
+        Route::get('cart', [CustomerHomeController::class, 'showCart'])->name('show.cart');
         Route::post('/rateProduct', [OrderController::class, 'rateProduct'])->name('rateProduct');
     });
     Route::get('/product-category/{id}', [CustomerHomeController::class, 'showCategory'])->name('show.category');
