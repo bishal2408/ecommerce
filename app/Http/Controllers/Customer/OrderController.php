@@ -69,9 +69,15 @@ class OrderController extends Controller
         {
             $itemId = strval($order->product->id).',';
             $items .= $itemId;
+            $product = Product::findOrFail($itemId);
+            $total_count = $product->purchase_count + $order->quantity;
             $order->update([
                 'on_cart' => Order::REMOVE_FROM_CART,
                 'order_status'=> Order::ORDER_ON_PROCESS,
+            ]);
+            
+            $product->update([
+                'purchase_count' => $total_count,
             ]);
         }
         $items = substr($items, 0, -1);

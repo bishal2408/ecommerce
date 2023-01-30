@@ -17,6 +17,7 @@ class Product extends Model
         'photo',
         'price',
         'stock_quantity',
+        'purchase_count',
     ];
     
     protected $appends = ['product_photo'];
