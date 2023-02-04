@@ -78,7 +78,6 @@ class CustomerHomeController extends Controller
                 $similarityScore = $dotProduct / sqrt($magnitudeA * $magnitudeB);
                 $similarityScores[$productId] = $similarityScore;
             }
-            
         }
         //  order the products by their cosine similarity score and return the top N products to the user as recommendations
         arsort($similarityScores);
@@ -97,7 +96,7 @@ class CustomerHomeController extends Controller
 
     public function AprioriAssociation($id)
     {
-        $apriori = new Apriori($support = 0.03, $confidence = 0.2);
+        $apriori = new Apriori($support = 0.03, $confidence = 0.25);
 
         // get the purchase data from the database
         $purchases = Purchase::all();
@@ -120,8 +119,10 @@ class CustomerHomeController extends Controller
                 $recommendations = array_merge($recommendations, $rule['consequent']);
             }
         }
+        // dd($rules);
         // remove duplicates from the recommendations
         $recommendations = array_unique($recommendations);
+        // dd($recommendations);
         // get the product details for the recommendations
         $products = Product::whereIn('id', $recommendations)->get();
         return $products;

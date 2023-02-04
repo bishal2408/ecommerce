@@ -27,7 +27,7 @@ class UserDemographicsController extends Controller
             if($product->purchase_count > $count ){
                 $count = $product->purchase_count;
                 $data['product_of_the_week'] = $product->name;
-                $data['product_of_the_week_unit_sold'] = Order::where(['product_id', $product->id])->pluck('quantity');
+                $data['product_of_the_week_unit_sold'] = $product->purchase_count;
             }
             $total_sales_count += $product->purchase_count;
             foreach($orders as $order){
@@ -38,7 +38,6 @@ class UserDemographicsController extends Controller
         }
         $data['total_sales_this_week'] = $total_sales_count;
         $data['total_revene_this_week'] = $total_revenue;
-        return $data;
         return view('merchant.demographics.index', compact('data'));
     }
 }
