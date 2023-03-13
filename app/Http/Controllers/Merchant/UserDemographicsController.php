@@ -22,6 +22,7 @@ class UserDemographicsController extends Controller
         $count = 0;
         $total_sales_count = 0;
         $total_revenue = 0;
+        
         foreach($products as $product)
         {
             if($product->purchase_count > $count ){

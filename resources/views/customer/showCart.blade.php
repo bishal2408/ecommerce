@@ -181,6 +181,24 @@
                                             CHECKOUT
                                           </button>
                                       </form>
+                                      @php 
+                                        $pid = uniqid();
+                                      @endphp
+                                      <h6 class="text-center font-weight-bold my-2">OR</h6>
+                                      <form action="https://uat.esewa.com.np/epay/main" method="POST" class="w-100">
+                                        <input value="10" name="tAmt" type="hidden">
+                                        <input value="10" name="amt" type="hidden">
+                                        <input value="0" name="txAmt" type="hidden">
+                                        <input value="0" name="psc" type="hidden">
+                                        <input value="0" name="pdc" type="hidden">
+                                        <input value="EPAYTEST" name="scd" type="hidden">
+                                        <input value="{{ $pid }}" name="pid" type="hidden">
+                                        <input value="{{ route('esewa.verify') }}" type="hidden" name="su">
+                                        <input value="{{ route('pay.fail') }}" type="hidden" name="fu">
+                                       <button class="btn w-100 btn-outline-success">Pay with E-Sewa</button>
+                                      </form>
+                                    
+
                                       
                                     </div>
                                   </div>

@@ -136,4 +136,60 @@ class OrderController extends Controller
         }
         return response()->json(["status" => "ok"]);
     }
+
+    public function esewaVerification(Request $request)
+    {
+        $url = "https://uat.esewa.com.np/epay/transrec";
+        $data =[
+            'amt'=> 10,
+            'rid'=> $request->get('refId'),
+            'pid'=> $request->get('oid'),
+            'scd'=> 'EPAYTEST'
+        ];
+        
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        
+        return redirect()->route('esewa.success');
+        
+    }
+
+    public function payFail()
+    {
+        dd('payment fail');
+    }
+
+    public function esewaSuccess()
+    {
+        $orders = Order::where('user_id', Auth::user()->id)
+                    ->where('on_cart', Order::ADD_TO_CART)
+                    ->where('order_status', null)
+                    ->get();
+        $items = '';
+        foreach($orders as $order)
+        {
+            $itemId = strval($order->product->id).',';
+            $items .= $itemId;
+            $product = Product::findOrFail($itemId);
+            $total_count = $product->purchase_count + $order->quantity;
+            $order->update([
+                'on_cart' => Order::REMOVE_FROM_CART,
+                'order_status'=> Order::ORDER_ON_PROCESS,
+                'is_paid' => Order::PAID_VIA_ESEWA
+            ]);
+            
+            $product->update([
+                'purchase_count' => $total_count,
+            ]);
+        }
+        $items = substr($items, 0, -1);
+        Purchase::create([
+            'items' => $items,
+        ]);
+        return redirect()->route('customer.show.cart')->with('orderMessage', 'Your Orders has been placed!!');
+    }
 }

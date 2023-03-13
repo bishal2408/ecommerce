@@ -50,7 +50,6 @@
                                                     <label for="rating5"><i  class="fa fa-star"></i></label>
                                                     <input type="radio" name="rating" id="rating5" value="5" @if ($user_rating == 5) checked @endif>
                                                 </p>
-
                                                
                                             </div>
 
