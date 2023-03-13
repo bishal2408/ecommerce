@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -193,6 +194,10 @@ class CustomerHomeController extends Controller
                         ->inRandomOrder()
                         ->take(4)
                         ->get();
+        $ratings = Rating::where('product_id', $product->id)->pluck('rating')->toArray();
+        $average_rating = number_format(array_sum($ratings)/count($ratings), 1, '.', '');
+        $comments = Comment::where('product_id', $product->id)->get();
+
         if(Auth::user() != null){
             $cart_count = Order::where('user_id', Auth::user()->id)
             ->where('on_cart', Order::ADD_TO_CART)
@@ -206,11 +211,11 @@ class CustomerHomeController extends Controller
                             ->where('product_id', $product->id)
                             ->where('on_cart', Order::ADD_TO_CART)
                             ->first();
-            return view('customer.showProduct', compact('product', 'similar_products', 'existingCartItem', 'cart_count', 'user_rating', 'associated_products'));
+            return view('customer.showProduct', compact('product', 'similar_products', 'existingCartItem', 'cart_count', 'user_rating', 'associated_products', 'average_rating', 'comments'));
         }
         $existingCartItem = null;
         $user_rating = null;
-        return view('customer.showProduct', compact('product', 'similar_products', 'existingCartItem', 'user_rating', 'associated_products'));
+        return view('customer.showProduct', compact('product', 'similar_products', 'existingCartItem', 'user_rating', 'associated_products', 'average_rating', 'comments'));
     }
 
     /**

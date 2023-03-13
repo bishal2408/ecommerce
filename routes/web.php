@@ -73,3 +73,4 @@ Route::group(['prefix'=>'customer', 'as'=>'customer.'], function(){
 });
 Route::get('/products', [CustomerHomeController::class, 'viewAllProduct'])->name('products');
 
+Route::resource('comment',\App\Http\Controllers\Customer\CommentController::class);

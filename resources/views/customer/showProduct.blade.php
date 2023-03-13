@@ -37,16 +37,21 @@
                                     <div class="col-md-8">
                                         <div class="star-rating">
                                             <div class="rating" data-item-id="{{ $product->id }}">
-                                                <label for="rating1"><i  class="fa fa-star"></i></label>
-                                                <input type="radio" name="rating" id="rating1" value="1" @if ($user_rating == 1) checked @endif>
-                                                <label for="rating2"><i  class="fa fa-star"></i></label>
-                                                <input type="radio" name="rating" id="rating2" value="2" @if ($user_rating == 2) checked @endif>
-                                                <label for="rating3"><i  class="fa fa-star"></i></label>
-                                                <input type="radio" name="rating" id="rating3" value="3" @if ($user_rating == 3) checked @endif>
-                                                <label for="rating4"><i  class="fa fa-star"></i></label>
-                                                <input type="radio" name="rating" id="rating4" value="4" @if ($user_rating == 4) checked @endif>
-                                                <label for="rating5"><i  class="fa fa-star"></i></label>
-                                                <input type="radio" name="rating" id="rating5" value="5" @if ($user_rating == 5) checked @endif>
+                                                <p class="m-0 font-weight-bold">
+                                                    Rate Product:
+                                                    <label for="rating1" class="ml-2"><i  class="fa fa-star"></i></label>
+                                                    <input type="radio" name="rating" id="rating1" value="1" @if ($user_rating == 1) checked @endif>
+                                                    <label for="rating2"><i  class="fa fa-star"></i></label>
+                                                    <input type="radio" name="rating" id="rating2" value="2" @if ($user_rating == 2) checked @endif>
+                                                    <label for="rating3"><i  class="fa fa-star"></i></label>
+                                                    <input type="radio" name="rating" id="rating3" value="3" @if ($user_rating == 3) checked @endif>
+                                                    <label for="rating4"><i  class="fa fa-star"></i></label>
+                                                    <input type="radio" name="rating" id="rating4" value="4" @if ($user_rating == 4) checked @endif>
+                                                    <label for="rating5"><i  class="fa fa-star"></i></label>
+                                                    <input type="radio" name="rating" id="rating5" value="5" @if ($user_rating == 5) checked @endif>
+                                                </p>
+
+                                               
                                             </div>
 
                                         </div>
@@ -94,7 +99,80 @@
                                             @endif
 
                                         </form>
+                                        
                                     </div>
+                                    <section>
+                                        <div class="container mt-5 ">
+                                          <div class="row d-flex justify-content-center">
+                                            <div class="col-md-12 col-lg-12 col-xl-12">
+                                              <div class="card shadow">
+                                                <div class="card-header">
+                                                    <h5 class="text-primary">Product Reviews <span class="text-danger">({{ $average_rating }})</span> </h5>
+                                                </div>
+                                                @foreach ($comments as $comment)
+                                                    <div class="card-body ">
+                                                        <div class="d-flex flex-start align-items-center">
+                                                            <img class="rounded-circle shadow-1-strong me-3"
+                                                                src="{{ $comment->commentUser->user_photo }}" alt="avatar" width="60"
+                                                                height="60" />
+                                                            <div class="d-flex ">
+                                                                <div class="mr-3">
+                                                                    <h6 class="fw-bold text-primary mb-1">{{ $comment->commentUser->name }}</h6>
+                                                                    <p class="text-muted small mb-0">
+                                                                        Shared publicly - {{ $comment->created_at->format('M d') }}
+                                                                    </p>
+                                                                </div>
+                                                                @if(Auth::check() && Auth::id() == $comment->commentUser->id )
+                                                                    <form action="{{ route('comment.destroy', ['comment'=>$comment->id]) }}" class="d-flex" method="POST">
+                                                                        @method('DELETE')
+                                                                        @csrf
+                                                                        <button type="submit" class="btn btn-outline-danger btn-sm me-1 mb-2" data-mdb-toggle="tooltip" title="Remove Comment">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <p class="my-2"> {{ $comment->comments }} </p>
+                                                    </div>
+                                                @endforeach
+                                                
+                                                @if(Auth::check())
+                                                <div class="card-footer py-3 border-0" >
+                                                    <div class="d-flex flex-start w-100">
+                                                      <img class="rounded-circle shadow-1-strong me-3"
+                                                        src="{{ Auth::user()->user_photo }}" alt="avatar" width="40"
+                                                        height="40" />
+                                                      <div class="form-outline w-100">
+                                                          <form action="{{ route('comment.store') }}" method="post">
+                                                              @csrf
+                                                              <textarea class="form-control" id="textAreaExample" rows="2"
+                                                              style="background: #fff;" name="comment" id="comment"></textarea>
+                                                              <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
+                                                              @error('comment')
+                                                                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                                      {{ $message }}
+                                                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                          <span aria-hidden="true">&times;</span>
+                                                                      </button>
+                                                                  </div>
+                                                              @enderror
+                                                              <div class="float-end mt-2 pt-1">
+                                                                  <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
+                                                              </div>
+                                                          </form>
+                                                          
+                                                      </div>
+                                                    </div>
+                                                    
+                                                  </div>
+                                                @endif
+
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </section>
                                    
                                 </div>
                             </div>
